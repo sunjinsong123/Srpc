@@ -83,7 +83,7 @@
                 <version>${lombok.version}</version>
             </dependency>
 
-            <!-- Fastjson2依 -->
+            <!-- Fastjson2依: -->
             <dependency>
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
