@@ -14,8 +14,8 @@
         <module>srpc-framework/srpc-common</module>
         <module>srpc-framework/srpc-core</module>
         <module>srpc-manager</module>
-        <module>srpc-demo/srpc-client-demo</module>
-        <module>srpc-demo/srpc-service-demo</module>
+        <module>srpc-demo/srpc-consumer-demo</module>
+        <module>srpc-demo/srpc-provider-demo</module>
         <module>srpc-demo/srpc-api</module>
     </modules>
 
