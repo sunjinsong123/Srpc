@@ -1,6 +1,15 @@
 package com.sunjinsong;
 
+import com.discovery.Registry;
+import com.discovery.RegistryConfig;
+import com.discovery.impl.ZookeeperRegistry;
+import com.sunjinsong.utils.zookeeper.ZookeeperUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.ZooKeeper;
+
+import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -11,20 +20,34 @@ import lombok.extern.slf4j.Slf4j;
 public class SrpcBootstrap {
     // 单例实例
     private static volatile SrpcBootstrap instance;
+    private String applicationName = "default";
+
+    private Registry registry= new ZookeeperRegistry();
+    private RegistryConfig registryConfig;
+
+    private ProtocalConfig protocalConfig;
+
+    private int port=8080;
+    private ZooKeeper zooKeeper;
 
     /**
      * 私有构造函数，避免外部直接创建实例。
      */
-    private SrpcBootstrap() {
+    private SrpcBootstrap() throws IOException, InterruptedException {
+        zooKeeper = ZookeeperUtil.createZooKeeper();
         // 构造方法逻辑
     }
+
+
+
 
     /**
      * 获取SrpcBootstrap类的单例实例。
      * 如果实例不存在，则创建一个新的实例。
+     *
      * @return 返回SrpcBootstrap的单例实例。
      */
-    public static SrpcBootstrap getInstance() {
+    public static SrpcBootstrap getInstance() throws IOException, InterruptedException {
         if (instance == null) {
             synchronized (SrpcBootstrap.class) {
                 if (instance == null) {
@@ -39,8 +62,14 @@ public class SrpcBootstrap {
      * 启动RPC服务。
      */
     public SrpcBootstrap start() {
+        //睡眠5秒
+        try {
+            Thread.sleep(25000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-            log.debug("开始了");
+        log.debug("开始了");
 
         // 启动服务的逻辑
         return this;
@@ -49,41 +78,61 @@ public class SrpcBootstrap {
 
     /**
      * 注册服务到注册中心。
+     *
      * @param registryConfig 注册中心配置
      */
-    public SrpcBootstrap register(RegistryConfig registryConfig) {
+    public SrpcBootstrap register(RegistryConfig registryConfig) throws IOException, InterruptedException {
+
+
+        this.registry = registryConfig.getRegistry();
         // 注册服务的逻辑
         return this;
     }
 
     /**
      * 发布单个服务。
+     *
      * @param service 服务配置
-     * @return 返回SrpcBootstrap实例以支持链式调用。
+     * @return 返回 SrpcBootstrap 实例以支持链式调用
      */
-    public SrpcBootstrap publish(ServiceConfig<?> service) {
+    public SrpcBootstrap publish(ServiceConfig<?> service) throws InterruptedException, KeeperException, IOException {
+        //抽象了注册中心的概念，使用注册中心的一个实现完成了注册
+
+
+      registry.register(service);
+
         // 发布服务的逻辑
         return this;
     }
 
     /**
      * 发布多个服务。
+     *
      * @param services 服务列表
-     * @return 返回SrpcBootstrap实例以支持链式调用。
+     * @return 返回 SrpcBootstrap 实例以支持链式调用
      */
-    public SrpcBootstrap publish() {
+    public SrpcBootstrap publish(List<ServiceConfig<?>> services) {
+        if (log.isDebugEnabled()) {
+            for (ServiceConfig<?> service : services) {
+                log.debug("当前工程发布了 {} 服务", service.getInterface().getName());
+            }
+        }
+
         // 发布服务的逻辑
         return this; // 支持链式调用
     }
 
+
     /**
      * 设置应用名称。
+     *
      * @param application 应用名
      * @return 返回SrpcBootstrap实例以支持链式调用。
      */
-    public SrpcBootstrap applicationName(String application) {
+    public SrpcBootstrap application(String application) {
+        this.applicationName = application;
         if (log.isDebugEnabled()) {
-            log.debug("应用的名称为:"+application);
+            log.debug("应用的名称为:" + application);
         }
         // 设置应用名的逻辑
         return this;
@@ -107,6 +156,8 @@ public class SrpcBootstrap {
      * @return 返回当前 SrpcBootstrap 实例以支持链式调用
      */
     public SrpcBootstrap protocal(ProtocalConfig protocalConfig) {
+        this.protocalConfig = protocalConfig;
+
         if (protocalConfig == null) {
             throw new IllegalArgumentException("ProtocalConfig must not be null");
         }
@@ -118,9 +169,9 @@ public class SrpcBootstrap {
     }
 
 
-
     /**
      * 设置服务引用配置。
+     *
      * @param referenceConfig 引用配置
      * @return 返回SrpcBootstrap实例以支持链式调用。
      */
@@ -129,4 +180,7 @@ public class SrpcBootstrap {
         return this;
     }
 
+
 }
+
+

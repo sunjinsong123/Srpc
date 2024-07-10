@@ -1,12 +1,13 @@
 package com.sunjinsong;
 
+import com.discovery.RegistryConfig;
 import com.srpc.HelloSrpc; // 导入远程服务接口
 
-import java.lang.ref.Reference;
+import java.io.IOException;
 
 public class Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         // 想尽一切办法获取代理对象
         ReferenceConfig<HelloSrpc> referenceConfig = new ReferenceConfig<>();
@@ -20,7 +21,7 @@ public class Application {
 
         // 以下代码启动客户端应用，配置应用名、注册中心信息并获取服务引用，最终启动服务
         SrpcBootstrap.getInstance()
-                .applicationName("first-srpc-consumer") // 配置应用名称，具体名称根据实际应用修改
+                .application("first-srpc-consumer") // 配置应用名称，具体名称根据实际应用修改
                 .register(new RegistryConfig("zookeeper:127.0.0.1:2181")) // 设置注册中心地址，需要根据实际使用填写
                 .reference(referenceConfig);
 

@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="GROUP_BY_SEVERITY" value="true" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="88342b64-6bd0-4363-82d9-b587810b9c86" name="Changes" comment="优化">
-      <change afterPath="$PROJECT_DIR$/srpc-demo/srpc-consumer-demo/src/main/java/com/sunjinsong/Application.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-demo/srpc-consumer-demo/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/java/com/srpc/impl/Application.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/ProtocalConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/ReferenceConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/RegistryConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/ServiceConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/SrpcBootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="88342b64-6bd0-4363-82d9-b587810b9c86" name="Changes" comment="初步建立Srpc框架，包含provider和consumer">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/common/Constant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/exceptions/NetworkException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/utils/net/NetUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/utils/zookeeper/ZookeeperNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/utils/zookeeper/ZookeeperUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/discovery/AbstractRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/discovery/Registry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/discovery/impl/NacosrRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/discovery/impl/ZookeeperRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/test/java/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/srpc-manager/src/main/java/com/sunjinsong/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-demo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-demo/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-demo/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-demo/src/main/java/com/sunjinsong/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-demo/srpc-client-demo/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-demo/srpc-client-demo/src/main/java/org/example/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-demo/srpc-service-demo/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-demo/srpc-service-demo/src/main/java/com/srpc/impl/HelloImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-demo/srpc-consumer-demo/src/main/java/com/sunjinsong/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-demo/srpc-consumer-demo/src/main/java/com/sunjinsong/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/java/com/srpc/impl/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/java/com/srpc/impl/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-framework/srpc-common/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-common/src/main/java/com/sunjinsong/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-manager/src/main/java/com/sunjinsong/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpc-manager/src/main/java/org/example/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/RegistryConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/discovery/RegistryConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/SrpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-framework/srpc-core/src/main/java/com/sunjinsong/SrpcBootstrap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-manager/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/srpc-manager/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpc-manager/src/main/java/com/sunjinsong/Main.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +49,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///srpc-provider-demo-effective-pom.xml" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -56,9 +63,9 @@
   <component name="ProblemsViewState">
     <option name="showPreview" value="true" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2ix8V7az8pO74hcyFWl5aEb3Liz" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -67,8 +74,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Application.executor": "Debug",
+    "Application.Application.executor": "Run",
     "Application.Main.executor": "Run",
+    "Application.NetUtils.executor": "Run",
+    "Application.SrpcBootstrap.executor": "Run",
+    "Application.Test.executor": "Debug",
+    "Application.com.sunjinsong.Application (1).executor": "Debug",
     "Application.com.sunjinsong.Application.executor": "Run",
     "Maven.RPC [clean].executor": "Run",
     "Maven.RPC [install].executor": "Run",
@@ -88,8 +99,17 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "MavenSettings",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "clickhouse",
+      "elasticsearch"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
@@ -115,12 +135,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.example.Main" />
-      <module name="RPC" />
+    <configuration name="NetUtils" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.sunjinsong.utils.net.NetUtils" />
+      <module name="srpc-common" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.example.*" />
+          <option name="PATTERN" value="com.sunjinsong.utils.net.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -128,7 +148,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="com.sunjinsong.Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="SrpcBootstrap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.sunjinsong.SrpcBootstrap" />
+      <module name="srpc-core" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.discovery.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
+      <module name="srpc-core" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.sunjinsong.Application (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.sunjinsong.Application" />
       <module name="srpc-consumer-demo" />
       <extension name="coverage">
@@ -144,8 +184,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Application" />
-        <item itemvalue="Application.com.sunjinsong.Application" />
-        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.com.sunjinsong.Application (1)" />
+        <item itemvalue="Application.NetUtils" />
+        <item itemvalue="Application.SrpcBootstrap" />
+        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
@@ -164,7 +206,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1720420889091</updated>
-      <workItem from="1720420890081" duration="20331000" />
+      <workItem from="1720420890081" duration="44964000" />
+      <workItem from="1720575237587" duration="2064000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <option name="closed" value="true" />
@@ -190,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720438068522</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="初步建立Srpc框架，包含provider和consumer">
+      <option name="closed" value="true" />
+      <created>1720503678022</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1720503678022</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -222,15 +273,31 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1" />
     <MESSAGE value="优化" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化" />
+    <MESSAGE value="初步建立Srpc框架，包含provider和consumer" />
+    <option name="LAST_COMMIT_MESSAGE" value="初步建立Srpc框架，包含provider和consumer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/java/com/srpc/impl/Application.java</url>
+          <url>file://$PROJECT_DIR$/srpc-framework/srpc-core/src/test/java/Test.java</url>
           <line>21</line>
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/srpc-framework/srpc-core/src/test/java/Test.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/java/com/srpc/impl/Application.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/srpc-demo/srpc-provider-demo/src/main/java/com/srpc/impl/Application.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
