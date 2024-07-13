@@ -12,7 +12,7 @@ public class Application {
         // 想尽一切办法获取代理对象
         ReferenceConfig<HelloSrpc> referenceConfig = new ReferenceConfig<>();
         // 设置远程服务接口，HelloSrpc是一个服务接口，定义了远程调用的方法
-        referenceConfig.setInterface(HelloSrpc.class);
+        referenceConfig.setInterfaceRef(HelloSrpc.class);
         // 代理做了些什么:
         // 1.连接注册中心：通过设置的注册中心地址连接注册中心，用于发现服务
         // 2.拉取服务列表：从注册中心获取所有可用的服务列表
@@ -22,7 +22,7 @@ public class Application {
         // 以下代码启动客户端应用，配置应用名、注册中心信息并获取服务引用，最终启动服务
         SrpcBootstrap.getInstance()
                 .application("first-srpc-consumer") // 配置应用名称，具体名称根据实际应用修改
-                .register(new RegistryConfig("zookeeper:127.0.0.1:2181")) // 设置注册中心地址，需要根据实际使用填写
+                .register(new RegistryConfig("zookeeper://127.0.0.1:2181")) // 设置注册中心地址，需要根据实际使用填写
                 .reference(referenceConfig);
 
 

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Test {
-    public static void main(String[] args) {
+    public static void  main(String[] args) {
         // 替换为实际的连接信息
         String url = "jdbc:clickhouse://10.28.147.124:8123/default";
         String user = "root";

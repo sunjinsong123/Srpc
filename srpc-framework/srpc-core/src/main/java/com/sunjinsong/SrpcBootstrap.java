@@ -4,12 +4,26 @@ import com.discovery.Registry;
 import com.discovery.RegistryConfig;
 import com.discovery.impl.ZookeeperRegistry;
 import com.sunjinsong.utils.zookeeper.ZookeeperUtil;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -22,6 +36,9 @@ public class SrpcBootstrap {
     private static volatile SrpcBootstrap instance;
     private String applicationName = "default";
 
+    //维护一个已经发布的服务，放在缓存中，防止频繁访问注册中心
+    public static  Map<String, ServiceConfig<?>> SERVICES_LIST = new ConcurrentHashMap<>();
+
     private Registry registry= new ZookeeperRegistry();
     private RegistryConfig registryConfig;
 
@@ -29,6 +46,9 @@ public class SrpcBootstrap {
 
     private int port=8080;
     private ZooKeeper zooKeeper;
+
+    //netty连接的缓存，如果使用InetSocketAddress这个类型的key。一定要看他有没有重写tostring和 equals方法
+    public final  static Map<InetSocketAddress, Channel> CHANNEL_CACHE = new ConcurrentHashMap<>();
 
     /**
      * 私有构造函数，避免外部直接创建实例。
@@ -62,16 +82,52 @@ public class SrpcBootstrap {
      * 启动RPC服务。
      */
     public SrpcBootstrap start() {
-        //睡眠5秒
+        // 创建一个新的服务器端的EventLoopGroup来处理客户端事件
+
+        //bossGroup只负责处理请求
+        //worker负责具体的业务处理
+        EventLoopGroup bossGroup = new NioEventLoopGroup(2);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(10);
+
         try {
-            Thread.sleep(25000);
+            // 创建服务器端启动对象   需要一个服务器引导程序
+            ServerBootstrap serverBootstrap  = new ServerBootstrap();
+
+            // 设置使用的EventLoopGroup  配置服务器
+            serverBootstrap.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)  // 设置服务器通道类型
+                    .option(ChannelOption.SO_BACKLOG, 100)  // 设置TCP连接的缓冲区等待队列长度
+                    .handler(new LoggingHandler(LogLevel.INFO))  // 设置日志处理器
+                    .childHandler(new ChannelInitializer<SocketChannel>() {  // 初始化处理器
+                        @Override
+                        protected void initChannel(SocketChannel ch) throws Exception {
+                            // 添加自定义处理器，例如编解码器和你的业务处理器
+                            //核心是这里
+                            ch.pipeline().addLast(new SimpleChannelInboundHandler<>() {
+                                @Override
+                                protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
+                                    ByteBuf buf = (ByteBuf) msg;
+                                    log.info("接收到客户端消息：" + buf.toString(Charset.defaultCharset()));
+                                    channelHandlerContext.channel().writeAndFlush(Unpooled.copiedBuffer("收到".getBytes()));
+                                    log.info("发送消息给客户端"+"收到");
+                                }
+                            });
+                        }
+                    });
+
+            // 绑定端口并启动服务器
+            ChannelFuture f = serverBootstrap.bind(8081).sync();
+
+            // 等待服务器socket关闭
+            f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        } finally {
+            // 优雅关闭EventLoopGroup
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
 
-        log.debug("开始了");
-
-        // 启动服务的逻辑
         return this;
     }
 
@@ -100,6 +156,7 @@ public class SrpcBootstrap {
 
 
       registry.register(service);
+      SERVICES_LIST.put(service.getInterface().getName(), service);
 
         // 发布服务的逻辑
         return this;
@@ -172,10 +229,19 @@ public class SrpcBootstrap {
     /**
      * 设置服务引用配置。
      *
-     * @param referenceConfig 引用配置
+//     * @param referenceConfig 引用配置
      * @return 返回SrpcBootstrap实例以支持链式调用。
      */
-    public SrpcBootstrap reference(ReferenceConfig<?> referenceConfig) {
+    public SrpcBootstrap  reference(ReferenceConfig<?> reference) {
+        /*
+        * 在这个方法里我们是否可以拿到相关的配置项-注册中心
+        * 配置reference，将来调用get方法时，方便生成代理对象
+        * 1.reference需要一个注册中心
+        *
+        *
+        *
+        * */
+        reference.setRegistry(registry);
         // 设置服务引用的逻辑
         return this;
     }

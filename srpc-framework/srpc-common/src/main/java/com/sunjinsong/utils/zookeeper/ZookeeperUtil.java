@@ -62,7 +62,7 @@ public class ZookeeperUtil {
         }
     }
 
-    public static void close(ZooKeeper zooKeeper){
+    public static void close(ZooKeeper zooKeeper) {
         try {
             zooKeeper.close();
             log.info("ZooKeeper连接已关闭");
@@ -76,11 +76,11 @@ public class ZookeeperUtil {
      * 检查指定路径的节点是否存在于ZooKeeper中。
      *
      * @param zooKeeper ZooKeeper的客户端实例
-     * @param path 需要检查的节点路径
-     * @param watcher 可选的Watcher实例，如果指定，当节点的状态变化时会接收通知
+     * @param path      需要检查的节点路径
+     * @param watcher   可选的Watcher实例，如果指定，当节点的状态变化时会接收通知
      * @return 如果节点存在返回true，否则返回false
      * @throws InterruptedException 如果线程被中断
-     * @throws KeeperException 如果ZooKeeper服务报告错误
+     * @throws KeeperException      如果ZooKeeper服务报告错误
      */
     public static boolean exists(ZooKeeper zooKeeper, String path, Watcher watcher) throws InterruptedException, KeeperException {
         try {
@@ -96,5 +96,17 @@ public class ZookeeperUtil {
             // 将捕获的异常包装成运行时异常抛出，简化调用者的错误处理需求
             throw new RuntimeException("检查节点存在性失败：路径=" + path, e);
         }
+    }
+    /*
+     * 查询一共节点的子元素
+     *
+     *
+     * @return
+     * */
+
+
+    public static List<String> getChildren(ZooKeeper zooKeeper, String serviceNode, Watcher watcher) throws InterruptedException, KeeperException {
+        return zooKeeper.getChildren(serviceNode, watcher);
+
     }
 }
