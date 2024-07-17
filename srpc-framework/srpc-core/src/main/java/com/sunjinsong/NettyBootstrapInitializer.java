@@ -1,14 +1,9 @@
 package com.sunjinsong;
 
+import com.channelhandler.ConsumerChannelInitializer;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /*
@@ -19,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * */
 @Slf4j
 public class NettyBootstrapInitializer {
-    private  static Bootstrap bootstrap=new Bootstrap();
+    private static Bootstrap bootstrap = new Bootstrap();
     private final static NettyBootstrapInitializer nettyBootstrapInitializer = new NettyBootstrapInitializer();
 
 
@@ -27,20 +22,7 @@ public class NettyBootstrapInitializer {
         NioEventLoopGroup group = new NioEventLoopGroup();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        // 初始化通道，设置编解码器和业务处理器
-                        ch.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
-
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf) throws Exception {
-                                     log.info("receive response: {}", byteBuf.toString(CharsetUtil.UTF_8));
-                            }
-                        });
-                    }
-                });
-
+                .handler(new ConsumerChannelInitializer());
     }
 
     private NettyBootstrapInitializer() {

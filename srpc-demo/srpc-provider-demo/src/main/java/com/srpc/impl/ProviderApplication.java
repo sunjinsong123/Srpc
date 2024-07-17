@@ -14,7 +14,7 @@ import java.io.IOException;
  * 主应用程序入口类，用于配置和启动SRPC服务提供者。
  */
 @Slf4j
-public class Application {
+public class ProviderApplication {
     public static void main(String[] args) {
         try {
             log.info("开始配置服务...");

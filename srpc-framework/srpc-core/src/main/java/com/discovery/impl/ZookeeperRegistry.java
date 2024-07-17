@@ -43,7 +43,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
             ZookeeperNode zookeeperNode = new ZookeeperNode(parentNode, null);
             ZookeeperUtil.createNode(zooKeeper, zookeeperNode, null , CreateMode.PERSISTENT);
         }
-        String node=parentNode+"/"+ NetUtils.getLocalIpAddress()+":"+Constant.PORT;
+        String node=parentNode+"/"+ NetUtils.getLocalIpAddress()+":"+String.valueOf(Constant.PRVOIDER_PORT);
 
         if (!ZookeeperUtil.exists(zooKeeper, node, null)) {
             ZookeeperNode zookeeperNode = new ZookeeperNode(node, null);

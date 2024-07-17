@@ -3,6 +3,7 @@ package com.sunjinsong;
 import com.discovery.Registry;
 import com.discovery.RegistryConfig;
 import com.discovery.impl.ZookeeperRegistry;
+import com.sunjinsong.common.Constant;
 import com.sunjinsong.utils.zookeeper.ZookeeperUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -11,8 +12,11 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
@@ -20,9 +24,9 @@ import org.apache.zookeeper.ZooKeeper;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -38,6 +42,8 @@ public class SrpcBootstrap {
 
     //维护一个已经发布的服务，放在缓存中，防止频繁访问注册中心
     public static  Map<String, ServiceConfig<?>> SERVICES_LIST = new ConcurrentHashMap<>();
+    //定义全局的对外挂起的请求
+    public static final Map<Long, CompletableFuture<Object>> PENDING_REQUEST = new ConcurrentHashMap<>();
 
     private Registry registry= new ZookeeperRegistry();
     private RegistryConfig registryConfig;
@@ -82,48 +88,38 @@ public class SrpcBootstrap {
      * 启动RPC服务。
      */
     public SrpcBootstrap start() {
-        // 创建一个新的服务器端的EventLoopGroup来处理客户端事件
-
-        //bossGroup只负责处理请求
-        //worker负责具体的业务处理
         EventLoopGroup bossGroup = new NioEventLoopGroup(2);
         EventLoopGroup workerGroup = new NioEventLoopGroup(10);
 
         try {
-            // 创建服务器端启动对象   需要一个服务器引导程序
-            ServerBootstrap serverBootstrap  = new ServerBootstrap();
-
-            // 设置使用的EventLoopGroup  配置服务器
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)  // 设置服务器通道类型
-                    .option(ChannelOption.SO_BACKLOG, 100)  // 设置TCP连接的缓冲区等待队列长度
-                    .handler(new LoggingHandler(LogLevel.INFO))  // 设置日志处理器
-                    .childHandler(new ChannelInitializer<SocketChannel>() {  // 初始化处理器
+                    .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 100)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
-                            // 添加自定义处理器，例如编解码器和你的业务处理器
-                            //核心是这里
-                            ch.pipeline().addLast(new SimpleChannelInboundHandler<>() {
+                        protected void initChannel(SocketChannel ch) {
+                            // 添加编码器和解码器
+                            ch.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));
+                            ch.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8));
+
+                            ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {  // 注意这里变更为String处理
                                 @Override
-                                protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
-                                    ByteBuf buf = (ByteBuf) msg;
-                                    log.info("接收到客户端消息：" + buf.toString(Charset.defaultCharset()));
-                                    channelHandlerContext.channel().writeAndFlush(Unpooled.copiedBuffer("收到".getBytes()));
-                                    log.info("发送消息给客户端"+"收到");
+                                protected void channelRead0(ChannelHandlerContext ctx, String msg) {
+                                    log.info("接收到客户端消息：" + msg);
+                                    ctx.channel().writeAndFlush("收到");
+                                    log.info("发送消息给客户端：" + "收到");
                                 }
                             });
                         }
                     });
 
-            // 绑定端口并启动服务器
-            ChannelFuture f = serverBootstrap.bind(8081).sync();
-
-            // 等待服务器socket关闭
+            ChannelFuture f = serverBootstrap.bind(Constant.PRVOIDER_PORT).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            // 优雅关闭EventLoopGroup
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }

@@ -1,13 +1,12 @@
 package com.sunjinsong;
-
 import com.discovery.RegistryConfig;
 import com.srpc.HelloSrpc; // 导入远程服务接口
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+@Slf4j
+public class ConsumerApplication {
 
-public class Application {
-
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         // 想尽一切办法获取代理对象
         ReferenceConfig<HelloSrpc> referenceConfig = new ReferenceConfig<>();
@@ -24,12 +23,11 @@ public class Application {
                 .application("first-srpc-consumer") // 配置应用名称，具体名称根据实际应用修改
                 .register(new RegistryConfig("zookeeper://127.0.0.1:2181")) // 设置注册中心地址，需要根据实际使用填写
                 .reference(referenceConfig);
-
-
             // 获取服务的引用，继续配置服务的相关参数
         HelloSrpc helloSrpc = referenceConfig.get();
-        System.out.println(helloSrpc.sayHello("sunjinsong"));
+        String result= helloSrpc.sayHello("sunjinsong");
 
+        log.info("result:{}",result);
     }
 
 
