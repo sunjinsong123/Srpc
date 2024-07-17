@@ -1,6 +1,7 @@
 package com.channelhandler.handler;
 
 import ch.qos.logback.core.rolling.helper.Compressor;
+import com.Srpcenum.RequestType;
 import com.caucho.hessian.io.Serializer;
 import com.sunjinsong.common.MessageFormConstant;
 import com.transport.message.SrpcRequest;
@@ -50,7 +51,7 @@ public class SrpcMessageEncoder extends MessageToMessageEncoder<SrpcRequest> {
         // 写入请求ID和时间戳
         byteBuf.writeLong(srpcRequest.getRequestId());
         byteBuf.writeLong(srpcRequest.getTimeStamp());
-
+        //如果是心跳请求，就不处理请求体
         // 序列化和压缩请求体
         byte[] body = getBodyBytes(srpcRequest.getPayload());
 

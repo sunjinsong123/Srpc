@@ -1,5 +1,7 @@
 package com.sunjinsong;
 
+import com.channelhandler.channel.MethodCallHandler;
+import com.channelhandler.handler.SrpcMessageDecoder;
 import com.discovery.Registry;
 import com.discovery.RegistryConfig;
 import com.discovery.impl.ZookeeperRegistry;
@@ -100,18 +102,11 @@ public class SrpcBootstrap {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) {
-                            // 添加编码器和解码器
-                            ch.pipeline().addLast(new StringDecoder(CharsetUtil.UTF_8));
-                            ch.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8));
+                            ch.pipeline()
+                                    .addLast(new LoggingHandler())
+                                    .addLast(new SrpcMessageDecoder())
+                                    .addLast(new MethodCallHandler());
 
-                            ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {  // 注意这里变更为String处理
-                                @Override
-                                protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-                                    log.info("接收到客户端消息：" + msg);
-                                    ctx.channel().writeAndFlush("收到");
-                                    log.info("发送消息给客户端：" + "收到");
-                                }
-                            });
                         }
                     });
 

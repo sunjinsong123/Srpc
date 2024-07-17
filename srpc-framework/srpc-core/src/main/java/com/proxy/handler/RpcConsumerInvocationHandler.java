@@ -1,5 +1,6 @@
 package com.proxy.handler;
 
+import com.Srpcenum.RequestType;
 import com.discovery.Registry;
 import com.sunjinsong.NettyBootstrapInitializer;
 import com.sunjinsong.SrpcBootstrap;
@@ -69,7 +70,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .build();
         SrpcRequest request = SrpcRequest.builder()
                 .requestId(1L)
-                .requestType(SrpcRequestConstant.REQUEST_TYPE_REQUEST)
+                .requestType(RequestType.REQUEST.getId())
                 .serializeType(SrpcRequestConstant.SERIALIZE_TYPE_PROTOBUF)
                 .compressType(SrpcRequestConstant.COMPRESS_TYPE_NONE)
                 .payload(requestPayload)
